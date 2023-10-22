@@ -1,14 +1,14 @@
-interface Stock {
+type Stock = {
   symbol: string;
   name: string;
   price: number;
-}
+};
 
-interface Bond {
+type Bond = {
   symbol: string;
   name: string;
   faceValue: number;
-}
+};
 
 type PortfolioItem = Stock | Bond;
 type Portfolio = PortfolioItem[];
