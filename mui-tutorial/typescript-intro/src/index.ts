@@ -49,7 +49,11 @@ const displayPortfolio = (portfolio: Portfolio): void => {
 };
 
 const apple: Stock = { symbol: "AAPL", name: "Apple Inc.", price: 150.25 };
-const google: Stock = { symbol: "GOOGL", name: "Alphabet Inc.", price: 2750.1 };
+const google: Stock = {
+  symbol: "GOOGL A",
+  name: "Alphabet Inc. Class A",
+  price: 2750.1,
+};
 const microsoft: Stock = { symbol: "MSFT", name: "Microsoft", price: 3500.75 };
 
 const usTreasuryBond: Bond = {

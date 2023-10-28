@@ -27,7 +27,11 @@ const displayPortfolio = (portfolio) => {
     console.log(`Total Portfolio Value: $${calculatePortfolioValue(portfolio)}`);
 };
 const apple = { symbol: "AAPL", name: "Apple Inc.", price: 150.25 };
-const google = { symbol: "GOOGL", name: "Alphabet Inc.", price: 2750.1 };
+const google = {
+    symbol: "GOOGL A",
+    name: "Alphabet Inc. Class A",
+    price: 2750.1,
+};
 const microsoft = { symbol: "MSFT", name: "Microsoft", price: 3500.75 };
 const usTreasuryBond = {
     symbol: "USTB",
