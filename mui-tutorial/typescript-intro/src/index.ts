@@ -50,7 +50,7 @@ const displayPortfolio = (portfolio: Portfolio): void => {
 
 const apple: Stock = { symbol: "AAPL", name: "Apple Inc.", price: 150.25 };
 const google: Stock = {
-  symbol: "GOOGL A",
+  symbol: "GOOGLA",
   name: "Alphabet Inc. Class A",
   price: 2750.1,
 };
