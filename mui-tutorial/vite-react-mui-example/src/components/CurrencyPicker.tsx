@@ -6,16 +6,10 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import React from "react";
+import useAppState from "../context/useContext";
 
-type CurrencyPickerProps = {
-  currency: string;
-  setCurrency: React.Dispatch<React.SetStateAction<string>>;
-};
-
-const CurrencyPicker: React.FC<CurrencyPickerProps> = ({
-  currency,
-  setCurrency,
-}) => {
+const CurrencyPicker: React.FC = () => {
+  const { currency, setCurrency } = useAppState();
   const currencyArray = ["USD", "EUR", "INR"];
 
   const handleChange = (event: SelectChangeEvent) => {

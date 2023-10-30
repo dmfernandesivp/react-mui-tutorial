@@ -1,26 +1,26 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import TitleBar from "./components/TitleBar";
 import LeftMenu from "./components/LeftMenu";
 import { Outlet } from "react-router";
-import { useState } from "react";
 
 function App() {
-  const [currency, setCurrency] = useState<string>("");
-
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <TitleBar currency={currency} setCurrency={setCurrency} />
+      <TitleBar />
       <Box
         sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start" }}
       >
-        <LeftMenu />
-        <Box
-          sx={{
-            flex: 1,
-          }}
-        >
-          <Outlet />
-        </Box>
+        <Grid container spacing={0}>
+          <Grid item xs={2}>
+            <LeftMenu />
+          </Grid>
+          <Grid item xs={10} lg={8}>
+            <Outlet />
+          </Grid>
+          <Grid item xs={2} sx={{ display: { xs: "none", md: "block" } }}>
+            <LeftMenu />
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

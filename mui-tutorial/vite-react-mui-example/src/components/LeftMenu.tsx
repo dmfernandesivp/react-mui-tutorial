@@ -19,7 +19,7 @@ const LeftMenu = () => {
   ];
 
   return (
-    <Paper sx={{ height: "100vh", width: 250, p: 2 }}>
+    <Paper sx={{ height: "100vh", width: "100%", pt: 2 }}>
       <List sx={{ pt: 8 }}>
         {menuItems.map((item, index) => (
           <Link

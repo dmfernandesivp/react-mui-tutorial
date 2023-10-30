@@ -2,12 +2,7 @@ import { AppBar, Container, Toolbar, Typography } from "@mui/material";
 import React from "react";
 import CurrencyPicker from "./CurrencyPicker";
 
-type TitleBarProps = {
-  currency: string;
-  setCurrency: React.Dispatch<React.SetStateAction<string>>;
-};
-
-const TitleBar: React.FC<TitleBarProps> = ({ currency, setCurrency }) => {
+const TitleBar: React.FC = () => {
   return (
     <AppBar color="primary">
       <Toolbar>
@@ -20,7 +15,7 @@ const TitleBar: React.FC<TitleBarProps> = ({ currency, setCurrency }) => {
           }}
         >
           <Typography variant="h6">Crypto Tracker</Typography>
-          <CurrencyPicker currency={currency} setCurrency={setCurrency} />
+          <CurrencyPicker />
         </Container>
       </Toolbar>
     </AppBar>

@@ -1,6 +1,6 @@
 import { Navigate, RouteObject, createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import CoinListGrid from "../components/CoinListGrid";
+import CoinListGrid from "../components/CoinTable/CoinListGrid";
 
 import Profile from "../components/Profile";
 import PageNotFound from "../components/PageNotFound";

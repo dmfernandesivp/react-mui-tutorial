@@ -7,10 +7,7 @@ type PageContentProps = {
 
 const PageContent: React.FC<PageContentProps> = ({ children }) => {
   return (
-    <Container
-      sx={{ paddingTop: 8, paddingLeft: 4, paddingRight: 4 }}
-      maxWidth={false}
-    >
+    <Container sx={{ pt: 8, pl: 4, pr: 4 }} maxWidth={false}>
       <Box
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
