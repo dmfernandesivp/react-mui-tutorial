@@ -3,9 +3,12 @@ import PageContent from "../PageContent";
 import {
   Box,
   LinearProgress,
+  Paper,
+  SxProps,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   Typography,
@@ -38,6 +41,7 @@ type CoinRowData = {
   rank: number;
   image: string;
   market_cap: number;
+  symbol: string;
 };
 
 function formatLargeNumber(num: number): string {
@@ -53,8 +57,19 @@ function formatLargeNumber(num: number): string {
   return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+const hoverStyles: SxProps = {
+  bgcolor: "white",
+  transition: "background-color 0.3s",
+  "&:hover": {
+    bgcolor: "#f5f5f5",
+  },
+  cursor: "pointer",
+};
+
 const CoinListGrid: React.FC = () => {
   const { currency } = useAppState();
+
+  const [searchText, setSearchText] = useState("");
 
   const [coinData, setCoinData] = useState<CoinRowData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,131 +99,145 @@ const CoinListGrid: React.FC = () => {
     fetchData();
   }, [currency]);
 
-  console.log(coinData);
+  const filteredCoinData = () => {
+    for (let i = 0; i < coinData?.length; i++) {
+      coinData[i].rank = i + 1;
+    }
+    if (searchText !== "" || searchText !== null) {
+      return coinData?.filter(
+        (coin) =>
+          coin.name.toLowerCase().includes(searchText) ||
+          coin.symbol?.toLowerCase().includes(searchText)
+      );
+    } else {
+      return coinData;
+    }
+  };
 
   return (
     <PageContent>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <CoinTableHeader />
-        <CoinTableSearchField />
+        <CoinTableSearchField
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
         {isLoading ? (
           <LinearProgress />
         ) : (
-          <Table>
-            <TableHead>
-              <TableRow>
-                {tableHeaders.map((head) => (
-                  <TableCell
-                    style={{ fontWeight: "700" }}
-                    key={head}
-                    align={
-                      head === "Rank" || head === "Coin"
-                        ? head === "Coin"
-                          ? "inherit"
-                          : "center"
-                        : "right"
-                    }
-                  >
-                    <Typography variant="subtitle1">{head}</Typography>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {coinData?.map((row: CoinRowData) => (
-                <TableRow
-                  key={row.id}
-                  //  className={classes.row}
-                >
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    sx={{ display: "flex", height: "100px" }}
-                  >
-                    <Typography variant="subtitle1" sx={{ ml: 3 }}>
-                      {row?.rank}
-                    </Typography>
-                  </TableCell>
-                  <TableCell component="th" scope="row" align="right">
-                    <div
-                      style={{
-                        display: "flex",
-
-                        alignItems: "center",
-                      }}
-                    >
-                      <img src={row?.image} alt={row?.name} height="50" />
-
-                      <Typography
-                        variant="subtitle1"
-                        style={{ paddingLeft: 20 }}
+          <Paper sx={{ width: "60rem", overflow: "hidden", my: 1 }}>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {tableHeaders.map((head, i) => (
+                      <TableCell
+                        sx={{ fontWeight: "700" }}
+                        key={head}
+                        align={i === 0 ? "left" : "center"}
                       >
-                        {row?.name}
-                      </Typography>
-                    </div>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="subtitle1">
-                      {formatLargeNumber(row?.current_price)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        color: Number(
-                          row?.price_change_percentage_1h_in_currency < 0
-                        )
-                          ? "red"
-                          : "green",
-                      }}
-                    >
-                      {row?.price_change_percentage_1h_in_currency?.toFixed(2)}%
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        color: Number(
-                          row?.price_change_percentage_24h_in_currency < 0
-                        )
-                          ? "red"
-                          : "green",
-                      }}
-                    >
-                      {row?.price_change_percentage_24h_in_currency?.toFixed(2)}
-                      %
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        color: Number(
-                          row?.price_change_percentage_7d_in_currency < 0
-                        )
-                          ? "red"
-                          : "green",
-                      }}
-                    >
-                      {row?.price_change_percentage_7d_in_currency?.toFixed(2)}%
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="subtitle1">
-                      {formatLargeNumber(row?.market_cap)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography>
-                      {formatLargeNumber(row?.total_volume)}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                        <Typography variant="subtitle1">{head}</Typography>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredCoinData()?.map((row: CoinRowData) => (
+                    <TableRow key={row.id} sx={hoverStyles}>
+                      <TableCell component="th" scope="row">
+                        <Typography variant="subtitle1" sx={{ ml: 3 }}>
+                          {row?.rank}
+                        </Typography>
+                      </TableCell>
+                      <TableCell component="th" scope="row" align="right">
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img src={row?.image} alt={row?.name} height="50" />
+
+                          <Typography
+                            variant="subtitle1"
+                            style={{ paddingLeft: 20 }}
+                          >
+                            {row?.name}
+                          </Typography>
+                        </div>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="subtitle1">
+                          {formatLargeNumber(row?.current_price)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography
+                          variant="subtitle1"
+                          sx={{
+                            color: Number(
+                              row?.price_change_percentage_1h_in_currency < 0
+                            )
+                              ? "red"
+                              : "green",
+                          }}
+                        >
+                          {row?.price_change_percentage_1h_in_currency?.toFixed(
+                            2
+                          )}
+                          %
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography
+                          variant="subtitle1"
+                          sx={{
+                            color: Number(
+                              row?.price_change_percentage_24h_in_currency < 0
+                            )
+                              ? "red"
+                              : "green",
+                          }}
+                        >
+                          {row?.price_change_percentage_24h_in_currency?.toFixed(
+                            2
+                          )}
+                          %
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography
+                          variant="subtitle1"
+                          sx={{
+                            color: Number(
+                              row?.price_change_percentage_7d_in_currency < 0
+                            )
+                              ? "red"
+                              : "green",
+                          }}
+                        >
+                          {row?.price_change_percentage_7d_in_currency?.toFixed(
+                            2
+                          )}
+                          %
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="subtitle1">
+                          {formatLargeNumber(row?.market_cap)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography>
+                          {formatLargeNumber(row?.total_volume)}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         )}
       </Box>
     </PageContent>
@@ -232,5 +261,6 @@ function transformData(data: any): CoinRowData[] {
     price_change_percentage_7d_in_currency:
       x.price_change_percentage_7d_in_currency,
     market_cap: x.market_cap,
+    symbol: x.symbol,
   }));
 }
