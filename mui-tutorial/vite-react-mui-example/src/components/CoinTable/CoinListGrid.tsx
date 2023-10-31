@@ -14,6 +14,7 @@ import CoinTableHeader from "./CoinTableHeader";
 import CoinTableSearchField from "./CoinTableSearchField";
 import useAppState from "../../context/useContext";
 import coinApi from "./services/coinApi";
+import jsonResponse from "./rawJson";
 
 const tableHeaders = [
   "Rank",
@@ -68,24 +69,14 @@ const CoinListGrid: React.FC = () => {
         }
         const data = await response.json();
 
-        const apiCoinData: CoinRowData[] = data?.map((x: any, i: number) => ({
-          id: x.id,
-          name: x.name,
-          current_price: x.current_price,
-          price_change_percentage_1h_in_currency:
-            x.price_change_percentage_1h_in_currency,
-          price_change_percentage_24h_in_currency:
-            x.price_change_percentage_24h_in_currency,
-          total_volume: x.total_volume,
-          rank: i + 1,
-          image: x.image,
-          price_change_percentage_7d_in_currency:
-            x.price_change_percentage_7d_in_currency,
-          market_cap: x.market_cap,
-        }));
+        const apiCoinData: CoinRowData[] = transformData(data);
         setCoinData(apiCoinData);
       } catch (err) {
         console.log(err);
+        console.log(jsonResponse);
+
+        const apiCoinData: CoinRowData[] = transformData(jsonResponse);
+        setCoinData(apiCoinData);
       } finally {
         setIsLoading(false);
       }
@@ -225,3 +216,21 @@ const CoinListGrid: React.FC = () => {
 };
 
 export default CoinListGrid;
+
+function transformData(data: any): CoinRowData[] {
+  return data?.map((x: any, i: number) => ({
+    id: x.id,
+    name: x.name,
+    current_price: x.current_price,
+    price_change_percentage_1h_in_currency:
+      x.price_change_percentage_1h_in_currency,
+    price_change_percentage_24h_in_currency:
+      x.price_change_percentage_24h_in_currency,
+    total_volume: x.total_volume,
+    rank: i + 1,
+    image: x.image,
+    price_change_percentage_7d_in_currency:
+      x.price_change_percentage_7d_in_currency,
+    market_cap: x.market_cap,
+  }));
+}
